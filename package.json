@@ -2,6 +2,9 @@
   "name": "chat-express",
   "version": "1.0.0",
   "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
   "repository": "https://github.com/MHieu128/chat-express.git",
   "author": "Horace <minhhieudn98@gmail.com>",
   "license": "MIT",
