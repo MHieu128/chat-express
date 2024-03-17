@@ -1,14 +1,24 @@
 const User = require('../../models/user');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const postlogin = async (req, res) => {
   try {
     const { username, password } = req.body;
 
     const user = await User.findOne({ username: username});
-
+    
     if (user && (await bcrypt.compare(password, user.password))) {
-      const token = "JWT_TOKEN";
+      const token = jwt.sign(
+        {
+          userId: user._id,
+          username
+        },
+        process.env.TOKEN_KEY,
+        {
+          expiresIn: '24h'
+        }
+      );
 
       return res.status(200).json({
         userDetails: {
