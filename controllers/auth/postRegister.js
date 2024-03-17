@@ -4,10 +4,20 @@ const bcrypt = require('bcryptjs');
 const postRegister = async (req, res) => {
   try {
     const { username, mail, password } = req.body;
-    const userExists = await User.exists({ mail: mail.toLowerCase() });
+    const userMailExists = await User.exists({ mail: mail.toLowerCase() });
+    const userNameExists = await User.exists({ username: username });
+    let invalidMsg = "";
 
-    if(userExists) {
-      return res.status(409).send("E-mail already in use!");
+    if(userMailExists) {
+      invalidMsg += "E-mail already in use! ";
+    }
+
+    if(userNameExists) {
+      invalidMsg += "User name already in use! ";
+    }
+
+    if(invalidMsg != "") {
+      return res.status(409).send(invalidMsg);
     }
 
     const encryptedPassword = await bcrypt.hash(password, 10);
